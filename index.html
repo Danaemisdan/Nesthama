@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Nesthama — A creative studio crafting stunning websites, events, concerts, photography, and videography experiences.">
+  <title>Nesthama — Creative Studio</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- Perandory Condensed via cdnfonts.com -->
+  <link rel="preconnect" href="https://fonts.cdnfonts.com" crossorigin>
+  <link href="https://fonts.cdnfonts.com/css/perandory" rel="stylesheet">
+  <style>
+    /* Override display font to Perandory once loaded */
+    :root { --display: 'Perandory', 'Cormorant Garamond', Georgia, serif; }
+  </style>
+</head>
+<body>
+
+  <!-- FIXED NAVIGATION -->
+  <nav id="main-nav" class="on-dark">
+    <div class="nav-left">Creative excellence,<br>crafted without compromise.</div>
+    <div class="nav-center"><div class="nav-dot" id="navDot"></div></div>
+    <div class="nav-right">
+      <a href="#" id="nav-contact">Get in touch</a>
+      <a href="#" id="nav-studio">Studio</a>
+    </div>
+  </nav>
+
+  <!-- SCROLL DOT INDICATOR -->
+  <div class="scroll-indicator" id="scrollIndicator" aria-hidden="true">
+    <div class="scroll-dot active" data-index="0"></div>
+    <div class="scroll-dot" data-index="1"></div>
+    <div class="scroll-dot" data-index="2"></div>
+    <div class="scroll-dot" data-index="3"></div>
+    <div class="scroll-dot" data-index="4"></div>
+    <div class="scroll-dot" data-index="5"></div>
+  </div>
+
+  <!-- ============================================================
+       SECTION 0 — HERO  [DARK]
+  ============================================================ -->
+  <section class="site-section dark active" id="hero" data-index="0">
+
+    <!-- Big wordmark SVG replaces text -->
+    <div class="hero-wordmark-svg">
+      <img src="SVGs/Nesthama.svg" alt="Nesthama" />
+    </div>
+
+    <!-- Bottom bar -->
+    <div class="hero-bottom-bar">
+      <span>01/</span>
+      <span>What we do</span>
+    </div>
+
+  </section>
+
+  <!-- ============================================================
+       SECTION 1 — INTRO  [LIGHT]
+  ============================================================ -->
+  <section class="site-section light" id="intro" data-index="1">
+    <div class="intro-content">
+      <div class="section-label">01 / What we do</div>
+      <h2>
+        We build things<br>that make people
+        <em>stop scrolling.</em>
+      </h2>
+      <p class="intro-body">
+        Nesthama is a creative studio born from the belief that beauty is not a luxury — it's a requirement. We craft digital experiences, live events, visual stories, and brand worlds that leave a mark. Not a footprint. A mark.
+      </p>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SECTION 2 — SERVICES  [DARK]
+  ============================================================ -->
+  <section class="site-section dark" id="services" data-index="2">
+    <div class="services-header">
+      <div class="section-label">02 / Services</div>
+    </div>
+
+    <div class="service-row">
+      <span class="service-name">Web Design</span>
+      <span class="service-meta">Digital</span>
+    </div>
+    <div class="service-row">
+      <span class="service-name">Events</span>
+      <span class="service-meta">Experiential</span>
+    </div>
+    <div class="service-row">
+      <span class="service-name">Concerts</span>
+      <span class="service-meta">Live Production</span>
+    </div>
+    <div class="service-row">
+      <span class="service-name">Photography</span>
+      <span class="service-meta">Visual</span>
+    </div>
+    <div class="service-row">
+      <span class="service-name">Videography</span>
+      <span class="service-meta">Film &amp; Motion</span>
+    </div>
+    <div class="service-row">
+      <span class="service-name">Brand Identity</span>
+      <span class="service-meta">Direction</span>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SECTION 3 — WORK  [LIGHT]
+  ============================================================ -->
+  <section class="site-section light" id="work" data-index="3">
+    <div class="section-label">03 / Selected Work</div>
+
+    <div class="work-list">
+      <a class="work-item" href="#">
+        <span class="work-title">Chapter One</span>
+        <span class="work-type">Web Design</span>
+        <span class="work-year">2025</span>
+      </a>
+      <a class="work-item" href="#">
+        <span class="work-title">Eclipse Festival</span>
+        <span class="work-type">Events &amp; Concerts</span>
+        <span class="work-year">2025</span>
+      </a>
+      <a class="work-item" href="#">
+        <span class="work-title">Solstice Sessions</span>
+        <span class="work-type">Photography &amp; Film</span>
+        <span class="work-year">2024</span>
+      </a>
+      <a class="work-item" href="#">
+        <span class="work-title">Midnight Arc</span>
+        <span class="work-type">Brand Identity</span>
+        <span class="work-year">2024</span>
+      </a>
+      <a class="work-item" href="#">
+        <span class="work-title">The Parallax</span>
+        <span class="work-type">Web Design &amp; Video</span>
+        <span class="work-year">2024</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SECTION 4 — STUDIO  [DARK]
+  ============================================================ -->
+  <section class="site-section dark" id="studio" data-index="4">
+    <div class="section-label">04 / Studio</div>
+
+    <div class="studio-grid">
+      <h2 class="studio-heading">
+        Seniority<br>without <em>the ego.</em>
+      </h2>
+      <div class="studio-text">
+        <p>
+          We are a tight-knit team of designers, directors, photographers, and producers who have spent years perfecting the craft of making things beautiful. We don't do ordinary. We don't do average.
+        </p>
+        <p>
+          Every project we take on is treated as a singular opportunity to create something that outlasts the brief. We work fast, think deep, and care about every pixel, frame, and moment.
+        </p>
+      </div>
+      <div class="studio-stats">
+        <div class="studio-stat">
+          <span class="studio-stat-number">80+</span>
+          <span class="studio-stat-label">Projects Delivered</span>
+        </div>
+        <div class="studio-stat">
+          <span class="studio-stat-number">12</span>
+          <span class="studio-stat-label">Countries</span>
+        </div>
+        <div class="studio-stat">
+          <span class="studio-stat-number">5</span>
+          <span class="studio-stat-label">Disciplines</span>
+        </div>
+        <div class="studio-stat">
+          <span class="studio-stat-number">∞</span>
+          <span class="studio-stat-label">Standards</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SECTION 5 — CONTACT  [LIGHT]
+  ============================================================ -->
+  <section class="site-section light" id="contact" data-index="5">
+    <div class="contact-content">
+      <div class="section-label">05 / Contact</div>
+
+      <h2 class="contact-cta">
+        Let's make something
+        <em>unforgettable.</em>
+      </h2>
+
+      <a class="contact-email" href="mailto:hello@nesthama.com">
+        hello@nesthama.com
+        <span class="contact-email-arrow">→</span>
+      </a>
+    </div>
+
+    <div class="contact-footer">
+      <span>© 2025 Nesthama Studio</span>
+      <span>Lagos · London · Online</span>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SCRIPTS
+  ============================================================ -->
+  <script>
+    // ─── Section navigation with blur cross-fade ─────────────────────────────
+    const sections = document.querySelectorAll('.site-section');
+    const dots = document.querySelectorAll('.scroll-dot');
+    const nav = document.getElementById('main-nav');
+
+    let currentIndex = 0;
+    let isTransitioning = false;
+    const TRANSITION_MS = 500;   // 500ms — snappy but smooth
+
+    function goToSection(index) {
+      if (index === currentIndex || isTransitioning) return;
+      if (index < 0 || index >= sections.length) return;
+
+      isTransitioning = true;
+
+      // Deactivate current
+      sections[currentIndex].classList.remove('active');
+
+      currentIndex = index;
+
+      // Activate target
+      sections[currentIndex].classList.add('active');
+
+      // Update dots
+      dots.forEach((d, i) => d.classList.toggle('active', i === currentIndex));
+
+      // Update nav color
+      const isDark = sections[currentIndex].classList.contains('dark');
+      nav.className = isDark ? 'on-dark' : 'on-light';
+
+      // Unlock after transition — give a tiny extra buffer
+      setTimeout(() => { isTransitioning = false; }, TRANSITION_MS + 50);
+    }
+
+    // ─── Wheel ───────────────────────────────────────────────────────────────
+    // Fire immediately on first wheel event above threshold.
+    // isTransitioning gates subsequent scrolls — no debounce timeout
+    // (debounce was causing 2-3s delay with trackpad momentum/inertia).
+    window.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      if (isTransitioning) return;
+      if (Math.abs(e.deltaY) < 5) return;  // ignore tiny jitter
+      const dir = e.deltaY > 0 ? 1 : -1;
+      goToSection(currentIndex + dir);
+    }, { passive: false });
+
+    // ─── Touch ───────────────────────────────────────────────────────────────
+    let touchStartY = 0;
+    window.addEventListener('touchstart', (e) => {
+      touchStartY = e.touches[0].clientY;
+    }, { passive: true });
+
+    window.addEventListener('touchend', (e) => {
+      const diff = touchStartY - e.changedTouches[0].clientY;
+      if (Math.abs(diff) > 50) {
+        goToSection(currentIndex + (diff > 0 ? 1 : -1));
+      }
+    }, { passive: true });
+
+    // ─── Keyboard ────────────────────────────────────────────────────────────
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowDown' || e.key === 'PageDown') goToSection(currentIndex + 1);
+      if (e.key === 'ArrowUp' || e.key === 'PageUp') goToSection(currentIndex - 1);
+    });
+
+    // ─── Dot clicks ──────────────────────────────────────────────────────────
+    dots.forEach((dot) => {
+      dot.addEventListener('click', () => {
+        goToSection(parseInt(dot.dataset.index));
+      });
+    });
+
+    // ─── Nav links ───────────────────────────────────────────────────────────
+    document.getElementById('nav-contact').addEventListener('click', (e) => {
+      e.preventDefault(); goToSection(5);
+    });
+    document.getElementById('nav-studio').addEventListener('click', (e) => {
+      e.preventDefault(); goToSection(4);
+    });
+  </script>
+
+</body>
+</html>
