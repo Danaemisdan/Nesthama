@@ -65,6 +65,8 @@
       </h2>
       
       <div class="copilot-av-wrapper" id="copilot-av">
+        <div class="av-badge left" id="av-badge-left"></div>
+        <div class="av-badge right" id="av-badge-right"></div>
         <div class="av-scene">
           <div class="av-search-bar" id="av-search">
             <span class="av-icon">✧</span>
@@ -484,10 +486,9 @@
     const mockupScenes = [
       {
         text: "Design a high-end website for my luxury restaurant.",
+        badges: ["↑ 10K+ Monthly Visitors", "↑ Reservations Up 3×"],
         html: `
           <div class="mockup-scene restaurant-scene">
-            <div class="metric-badge left">↑ 10K+ Monthly Visitors</div>
-            <div class="metric-badge right">↑ Reservations Up 3×</div>
             <div class="scene-nav">
               <div class="scene-logo">AERIA</div>
               <div class="scene-links"><span>Menu</span><span>Private Dining</span></div>
@@ -502,10 +503,9 @@
       },
       {
         text: "Generate a disruptive brand identity for a music festival.",
+        badges: ["↑ Brand Recognition +240%", "↑ Sold Out in 48hrs"],
         html: `
           <div class="mockup-scene festival-scene">
-            <div class="metric-badge left">↑ Brand Recognition +240%</div>
-            <div class="metric-badge right">↑ Sold Out in 48hrs</div>
             <div class="fest-grid">
               <div class="fest-col fest-dark">
                 <div class="fest-year">2026</div>
@@ -519,10 +519,9 @@
       },
       {
         text: "Build a sleek e-commerce store for streetwear.",
+        badges: ["↑ Sales Doubled", "↑ Cart Abandonment −62%"],
         html: `
           <div class="mockup-scene fashion-scene">
-            <div class="metric-badge left">↑ Sales Doubled</div>
-            <div class="metric-badge right">↑ Cart Abandonment −62%</div>
             <div class="fash-nav">
               <div class="fash-logo">V Ø I D</div>
               <div class="fash-cart">CART (2)</div>
@@ -541,10 +540,9 @@
       },
       {
         text: "Create a minimalist portfolio for my photography agency.",
+        badges: ["↑ SEO Boosted", "↑ Inquiries Up 5×"],
         html: `
           <div class="mockup-scene photo-scene">
-            <div class="metric-badge left">↑ SEO Boosted</div>
-            <div class="metric-badge right">↑ Inquiries Up 5×</div>
             <div class="photo-hero">
               <div class="photo-title">LIGHT &<br>SHADOW</div>
               <div class="photo-sub">Selected Works 24/25</div>
@@ -559,10 +557,9 @@
       },
       {
         text: "Design a futuristic landing page for an AI robotics company.",
+        badges: ["↑ Investor Leads ×4", "↑ Bounce Rate −58%"],
         html: `
           <div class="mockup-scene tech-scene">
-            <div class="metric-badge left">↑ Investor Leads ×4</div>
-            <div class="metric-badge right">↑ Bounce Rate −58%</div>
             <div class="tech-nav">
               <div class="tech-logo">AURA::ROBOTICS</div>
               <div class="tech-links"><span>VISION</span><span>MODELS</span></div>
@@ -576,9 +573,9 @@
       },
       {
         text: "Create a sophisticated web presence for an architecture firm.",
+        badges: ["↑ Global Reach +180%", "↑ Project Inquiries ×3"],
         html: `
           <div class="mockup-scene arch-scene">
-            <div class="metric-badge right">↑ Global Reach +180%</div>
             <div class="arch-sidebar">
               <div class="arch-logo">K N O T</div>
               <div class="arch-info">
@@ -594,6 +591,19 @@
         `
       }
     ];
+
+    function updateBadges(scene) {
+      const bl = document.getElementById('av-badge-left');
+      const br = document.getElementById('av-badge-right');
+      if (!scene.badges) return;
+      // Fade out
+      bl.style.opacity = '0'; br.style.opacity = '0';
+      setTimeout(() => {
+        bl.textContent = scene.badges[0] || '';
+        br.textContent = scene.badges[1] || '';
+        bl.style.opacity = '1'; br.style.opacity = '1';
+      }, 400);
+    }
 
 
     let currentScene = 0;
