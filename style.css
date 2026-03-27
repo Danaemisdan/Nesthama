@@ -860,14 +860,46 @@ body.light-bg-active.loaded #flying-logo {
 
 /* ========== RESPONSIVE ========== */
 @media (max-width: 768px) {
+  /* Global Resets */
+  .custom-cursor { display: none !important; }
+  body, a, button, .scroll-dot, .work-item { cursor: auto !important; }
   nav { padding: 16px 20px; }
   .nav-left { display: none; }
   .site-section { padding: 24px 20px; }
-  .hero-wordmark-svg { padding: 0 20px; bottom: 80px; }
-  .hero-logo-mark { left: 20px; }
+  
+  /* Hero Collisions Fix */
+  .hero-logo-mark { left: 50%; top: 35%; transform: translate(-50%, -50%) scale(0.6); }
+  .flying-logo { height: auto !important; width: 85vw; bottom: 15%; object-fit: contain; }
+  body.scrolled-past-hero .flying-logo { bottom: calc(100% - 42px) !important; width: 180px !important; height: 24px !important; }
+  .hero-bottom-bar { padding: 16px 20px; font-size: 10px; }
+  
+  /* Copilot Canvas & Bubbles Fix */
+  .copilot-av-wrapper { padding: 0 !important; margin-top: 20px; height: 55vh; min-height: 480px; }
+  .av-scene { border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); }
+  .av-search-bar { padding: 16px; font-size: 13px; }
+  .copilot-title { font-size: 32px; letter-spacing: 2px; }
+  
+  /* Metric Badges - Mobile Overrides */
+  .av-badge { font-size: 8px; padding: 6px 10px; letter-spacing: 1px; backdrop-filter: blur(24px); transform: none !important; z-index: 100; }
+  .av-badge.left { top: -12px !important; left: 10px !important; bottom: auto !important; animation: none !important; }
+  .av-badge.right { top: -12px !important; right: 10px !important; bottom: auto !important; animation: none !important; }
+  
+  /* Scene Geometry Fixes */
+  .scene-nav, .fash-nav, .tech-nav { padding: 16px; font-size: 10px; }
+  .scene-hero, .street-hero, .photo-hero, .tech-hero { padding: 20px; }
+  .scene-title, .fest-huge, .fash-title, .photo-title, .tech-title, .arch-title { font-size: 42px !important; line-height: 1 !important; letter-spacing: 1px !important; }
+  .fash-layout, .fest-grid, .arch-scene { flex-direction: column !important; display: flex !important; }
+  .fash-sidebar, .arch-sidebar { width: 100% !important; padding: 20px !important; border: none !important; border-top: 1px solid rgba(255,255,255,0.1); }
+  
+  /* Services Fix */
+  .needs-wrapper { margin-top: 60px; }
+  .needs-headline { font-size: 12px; }
+  .needs-prefix { font-size: 42px; line-height: 1.2; text-align: left; }
+  .need-word { font-size: 42px !important; position: absolute; left: 0; padding-top: 8px; white-space: normal; line-height: 1.1; }
+  
+  /* Footer Stats */
   .studio-grid { grid-template-columns: 1fr; gap: 28px; }
   .studio-stats { flex-wrap: wrap; gap: 20px; }
-  .work-type, .work-year { display: none; }
   .contact-cta { font-size: clamp(36px, 10vw, 68px); }
   .scroll-indicator { right: 14px; }
 }
