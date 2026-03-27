@@ -39,6 +39,29 @@ html, body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* ========== HERO STAGGER ANIMATIONS ========== */
+#hero .hero-wordmark-svg img,
+#hero .hero-bottom-bar,
+nav,
+.scroll-indicator {
+  opacity: 0;
+  filter: blur(8px);
+  transition: opacity 1.4s ease, transform 1.4s cubic-bezier(0.4,0,0.2,1), filter 1.4s ease;
+}
+
+#hero .hero-wordmark-svg img,
+#hero .hero-bottom-bar,
+nav {
+  transform: translateY(30px);
+}
+
+body.loaded #hero .hero-wordmark-svg img { transition-delay: 0.1s; opacity: 1; transform: translateY(0); filter: blur(0); }
+body.loaded #hero .hero-bottom-bar { transition-delay: 0.3s; opacity: 0.45; transform: translateY(0); filter: blur(0); }
+body.loaded nav { transition-delay: 0.5s; opacity: 1; transform: translateY(0); filter: blur(0); }
+
+/* Note: scroll-indicator has transform: translateY(-50%) natively */
+body.loaded .scroll-indicator { transition-delay: 0.7s; opacity: 1; transform: translateY(-50%); filter: blur(0); }
+
 /* ========== FIXED NAV ========== */
 nav {
   position: fixed;
@@ -75,18 +98,55 @@ nav.on-light {
   gap: 8px;
 }
 
-.nav-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: currentColor;
-  opacity: 0.85;
-  animation: pulse 3s ease-in-out infinite;
+/* ========== FLYING LOGO ========== */
+.flying-logo {
+  position: fixed;
+  bottom: 40px; 
+  left: 50%;
+  height: 58vh;
+  width: 90vw;
+  object-fit: contain; 
+  object-position: center bottom;
+  z-index: 1001;
+  pointer-events: none;
+  
+  /* Initial state (pre-load) */
+  opacity: 0;
+  transform: translate(-50%, 30px);
+  filter: brightness(0) invert(1) blur(12px);
+  
+  /* Pre-load fallback transition */
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-@keyframes pulse {
-  0%, 100% { opacity: 0.85; transform: scale(1); }
-  50%       { opacity: 0.35; transform: scale(0.7); }
+body.loaded:not(.scrolled-past-hero) .flying-logo {
+  /* Arrive at Hero state */
+  opacity: 1;
+  transform: translate(-50%, 0);
+  filter: brightness(0) invert(1) blur(0px);
+  
+  /* 
+     Geometry flight (bottom, height, width) stays snappy 0.8s. 
+     Load properties (opacity, transform, filter) get the sexy 1.4s ease stagger.
+  */
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1), 
+              opacity 1.4s ease 0.1s, 
+              transform 1.4s cubic-bezier(0.4,0,0.2,1) 0.1s, 
+              filter 1.4s ease 0.1s;
+}
+
+body.scrolled-past-hero .flying-logo {
+  /* Move to Nav State */
+  opacity: 1;
+  transform: translate(-50%, 0);
+  filter: brightness(0) invert(1) blur(0px);
+  
+  bottom: calc(100% - 48px); /* Visually tuned upwards to account for SVG internal bounds */
+  height: 40px; /* Radically larger nav menu size */
+  width: 300px; /* Safe bounds to prevent object-fit boxing */
+  
+  /* Enforce fast 0.8s flight transition on everything */
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .nav-right {
@@ -176,12 +236,78 @@ nav.on-light {
 .site-section.dark {
   background: var(--off-black);
   color: var(--off-white);
+  isolation: isolate; 
+}
+
+/* ==========================================================
+   ETHEREAL SHADOW BACKGROUND (Optimized CSS-Driven)
+   ========================================================== */
+.site-section .ethereal-shadow-wrapper {
+  visibility: hidden;
+  transition: visibility 0s linear 0.5s; 
+}
+
+.site-section.active .ethereal-shadow-wrapper {
+  visibility: visible;
+  transition: visibility 0s;
+}
+
+.ethereal-shadow-wrapper {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.ethereal-blob {
+  position: absolute;
+  inset: -100px;
+  filter: url(#ethereal-shadow-filter) blur(4px);
+  will-change: filter;
+  transform: translateZ(0); 
+}
+
+.ethereal-blob-inner {
+  width: 100%;
+  height: 100%;
+  background-color: rgba(128, 128, 128, 0.4);
+  -webkit-mask-image: url('https://framerusercontent.com/images/ceBGguIpUU8luwByxuQz79t7To.png');
+  -webkit-mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-image: url('https://framerusercontent.com/images/ceBGguIpUU8luwByxuQz79t7To.png');
+  mask-size: 100% 100%;
+  mask-repeat: no-repeat;
+  mask-position: center;
+}
+
+.ethereal-noise {
+  position: absolute;
+  inset: 0;
+  background-image: url('https://framerusercontent.com/images/g0QcWrxr87K0ufOxIUFBakwYA8.png');
+  background-size: 240px;
+  background-repeat: repeat;
+  opacity: 0.5;
+  mix-blend-mode: overlay;
 }
 
 /* Light sections: white bg, dark text */
 .site-section.light {
   background: var(--white);
   color: var(--off-black);
+  isolation: isolate; 
+}
+
+/* Light sections: White theme Ethereal blend */
+.site-section.light .ethereal-blob-inner {
+  background-color: rgba(60, 60, 60, 0.15); 
+}
+
+.site-section.light .ethereal-noise {
+  opacity: 0.15;
 }
 
 /* ========== SECTION LABEL ========== */
@@ -214,13 +340,14 @@ nav.on-light {
   overflow: hidden;
 }
 
-.hero-wordmark-svg img {
-  width: 100%;
-  /* Make logo very large — fills ~72% of viewport height */
-  height: 58vh;
-  object-fit: contain;
-  object-position: left bottom;
-  filter: brightness(0) invert(1);
+/* (Old statically placed hero wordmark removed in favor of flying-logo) */
+
+/* Inversion layer for bright themes natively driven */
+body.light-bg-active #flying-logo {
+  filter: invert(1);
+}
+body.light-bg-active.loaded #flying-logo {
+  filter: blur(0px) invert(1);
 }
 
 .hero-bottom-bar {
@@ -239,86 +366,275 @@ nav.on-light {
   border-top: 1px solid rgba(255,255,255,0.08);
 }
 
-/* ========== INTRO ========== */
-#intro {
+/* ========== COPILOT SEQUENCE ========== */
+#copilot {
   justify-content: center;
-  padding-top: 80px;
-}
-
-.intro-content { max-width: 800px; }
-
-.intro-content h2 {
-  font-family: var(--display);
-  font-weight: 400;
-  font-size: clamp(34px, 4.5vw, 64px);
-  line-height: 1.18;
-  margin-bottom: 36px;
-  font-style: italic;
-  letter-spacing: -0.01em;
-}
-
-.intro-content h2 em {
-  font-style: normal;
-  opacity: 0.35;
-}
-
-.intro-body {
-  font-family: var(--sans);
-  font-size: 14px;
-  font-weight: 300;
-  line-height: 1.9;
-  letter-spacing: 0.02em;
-  max-width: 480px;
-  opacity: 0.7;
-}
-
-/* ========== SERVICES ========== */
-#services {
-  justify-content: center;
-  padding-top: 80px;
-  gap: 0;
-}
-
-.services-header { margin-bottom: 12px; }
-
-.service-row {
-  display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 18px 0;
-  border-top: 1px solid rgba(128,128,128,0.15);
-  cursor: pointer;
+  text-align: center;
+}
+
+.copilot-container {
+  width: 100%;
+  max-width: 900px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.copilot-title {
+  font-family: var(--display);
+  font-size: clamp(40px, 6vw, 90px);
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  transition: transform 1.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 1.6s ease;
+  z-index: 10;
+}
+
+.copilot-title.shift-up {
+  transform: translate(-50%, -310px) scale(0.65);
+  opacity: 0.9;
+}
+
+.blur-char {
+  display: inline-block;
+  will-change: filter, opacity;
+}
+
+/* AV Wrapper */
+.copilot-av-wrapper {
+  margin-top: 50px;
+  width: 100%;
+  height: 480px;
+  background: rgba(25, 25, 25, 0.4);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 12px;
+  opacity: 0;
+  transform: translateY(40px) scale(0.95);
+  transition: opacity 1.6s ease, transform 1.6s cubic-bezier(0.4,0,0.2,1);
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
   position: relative;
 }
 
-.service-row:last-child { border-bottom: 1px solid rgba(128,128,128,0.15); }
-
-.service-row::before {
-  content: '';
-  position: absolute;
-  left: -100%; top: 0; bottom: 0; width: 100%;
-  background: rgba(128,128,128,0.05);
-  transition: left 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-}
-.service-row:hover::before { left: 0; }
-
-.service-name {
-  font-family: var(--display);
-  font-weight: 400;
-  font-size: clamp(32px, 5vw, 76px);
-  line-height: 1;
-  transition: letter-spacing 0.5s cubic-bezier(0.4,0,0.2,1);
+.copilot-av-wrapper.reveal {
+  opacity: 1;
+  transform: translateY(0) scale(1);
 }
 
-.service-row:hover .service-name { letter-spacing: 0.04em; }
+.av-scene {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
 
-.service-meta {
+.av-search-bar {
+  padding: 24px 32px;
   font-family: var(--sans);
-  font-size: 11px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  opacity: 0.45;
+  font-size: 16px;
+  color: rgba(255,255,255,0.9);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: rgba(10,10,10,0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 20;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.av-icon { color: rgba(255,255,255,0.4); }
+
+.av-visuals {
+  flex: 1;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: var(--off-black); /* Gives it a slight solid base underneath the blur */
+}
+
+/* ==========================================================
+   AV MOCKUP SCENES (Premium Refinements)
+   ========================================================== */
+.mockup-scene {
+  position: absolute;
+  inset: 0;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  
+  /* Pure Generative Blur Effect */
+  opacity: 0;
+  filter: blur(24px);
+  transition: opacity 1.8s ease, filter 1.8s ease;
+  z-index: 1;
+}
+
+.mockup-scene.visible {
+  opacity: 1;
+  filter: blur(0px);
+  z-index: 2; /* Crossfading over the old scene */
+}
+
+.mockup-scene.exiting {
+  opacity: 0;
+  filter: blur(16px);
+  z-index: 1;
+}
+
+/* 1. Restaurant */
+.restaurant-scene {
+  background: url('https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?q=80&w=2600&auto=format&fit=crop') center/cover;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 40px; color: #fff;
+}
+.restaurant-scene::after {
+  content: ''; position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.8)); z-index: 0;
+}
+.restaurant-scene > * { z-index: 1; position: relative; }
+.scene-nav { display: flex; justify-content: space-between; align-items: center; width: 100%; }
+.scene-logo { font-family: 'Times New Roman', serif; font-size: 24px; letter-spacing: 4px; }
+.scene-links { display: flex; gap: 24px; font-family: var(--sans); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; }
+.scene-hero { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 16px; margin-bottom: 20px; }
+.scene-subtitle { font-family: var(--sans); font-size: 11px; letter-spacing: 4px; text-transform: uppercase; opacity: 0.8; }
+.scene-title { font-family: 'Times New Roman', serif; font-size: 80px; font-weight: 300; font-style: italic; line-height: 1; }
+.scene-btn-glass { 
+  margin-top: 20px; padding: 16px 32px; font-family: var(--sans); font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+  background: rgba(255,255,255,0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); border-radius: 4px;
+}
+
+/* 2. Cyber Festival */
+.festival-scene { background: #0a0a0a; padding: 20px; }
+.fest-grid { display: flex; width: 100%; height: 100%; gap: 20px; }
+.fest-col { flex: 1; border-radius: 8px; position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; padding: 30px; }
+.fest-dark { background: #111; border: 1px solid rgba(255,255,255,0.1); }
+.fest-img { 
+  background: url('https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=2000&auto=format&fit=crop') center/cover;
+  filter: saturate(2) hue-rotate(90deg) contrast(1.2);
+}
+.fest-year { font-family: var(--sans); font-size: 14px; color: #ff0055; font-weight: bold; letter-spacing: 2px; }
+.fest-huge { font-family: var(--sans); font-size: 72px; font-weight: 900; line-height: 0.9; color: #fff; text-transform: uppercase; letter-spacing: -2px; }
+.fest-date { font-family: var(--sans); font-size: 12px; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 1px; }
+
+/* 3. Fashion E-commerce */
+.fashion-scene { background: #e0e0e0; color: #000; flex-direction: column; padding: 20px; font-family: var(--sans); }
+.fash-nav { display: flex; justify-content: space-between; padding-bottom: 20px; border-bottom: 1px solid rgba(0,0,0,0.1); margin-bottom: 20px; }
+.fash-logo { font-weight: 900; font-size: 18px; letter-spacing: 3px; }
+.fash-cart { font-size: 11px; font-weight: 600; letter-spacing: 1px; }
+.fash-layout { display: flex; gap: 20px; flex: 1; min-height: 0; }
+.fash-main-img { flex: 2; height: 100%; background: url('https://images.unsplash.com/photo-1523398002811-999aa8073ea9?q=80&w=1600&auto=format&fit=crop') center/cover; border-radius: 4px; filter: grayscale(1) contrast(1.1); }
+.fash-sidebar { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 16px; }
+.fash-title { font-weight: 800; font-size: 32px; letter-spacing: -1px; text-transform: uppercase; line-height: 1.1; }
+.fash-price { font-size: 16px; font-weight: 500; }
+.fash-desc { font-size: 12px; line-height: 1.6; color: rgba(0,0,0,0.6); }
+.fash-add { margin-top: auto; padding: 16px; background: #000; color: #fff; text-align: center; font-size: 11px; font-weight: 700; letter-spacing: 2px; border-radius: 4px; }
+
+/* 4. Photo Portfolio */
+.photo-scene { background: #fff; color: #000; flex-direction: column; padding: 40px; }
+.photo-hero { margin-bottom: 30px; }
+.photo-title { font-family: var(--display); font-size: 64px; line-height: 0.9; text-transform: uppercase; }
+.photo-sub { font-family: var(--sans); font-size: 11px; letter-spacing: 2px; margin-top: 12px; color: #666; text-transform: uppercase; }
+.photo-gallery { display: flex; gap: 20px; flex: 1; min-height: 0; }
+.photo-img { height: 100%; background-size: cover; background-position: center; border-radius: 2px; }
+.photo-img.i1 { flex: 1.5; background-image: url('https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?q=80&w=1200&auto=format&fit=crop'); filter: grayscale(1); }
+.photo-img.i2 { flex: 1; background-image: url('https://images.unsplash.com/photo-1447069387366-2a3471283842?q=80&w=1200&auto=format&fit=crop'); }
+.photo-img.i3 { flex: 1.2; background-image: url('https://images.unsplash.com/photo-1542038784456-1ea8e935640e?q=80&w=1200&auto=format&fit=crop'); filter: grayscale(1); }
+
+/* 5. Tech Startup AI */
+.tech-scene { background: #000 url('https://images.unsplash.com/photo-1620712943543-bcc4688e7485?q=80&w=2000&auto=format&fit=crop') center/cover; color: #fff; flex-direction: column; padding: 40px; justify-content: space-between; }
+.tech-nav { display: flex; justify-content: space-between; align-items: center; width: 100%; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 20px;}
+.tech-logo { font-family: monospace; font-size: 14px; letter-spacing: 2px; font-weight: bold; }
+.tech-links { display: flex; gap: 24px; font-family: var(--sans); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; opacity: 0.6; }
+.tech-hero { display: flex; flex-direction: column; align-items: flex-start; margin-bottom: 40px; }
+.tech-badge { border: 1px solid rgba(255,255,255,0.3); padding: 6px 16px; border-radius: 20px; font-size: 10px; letter-spacing: 1px; margin-bottom: 24px; font-family: var(--sans); }
+.tech-title { font-family: var(--display); font-size: 96px; line-height: 0.85; font-weight: 400; letter-spacing: -2px; }
+
+/* 6. Architecture */
+.arch-scene { background: #f0f0f0; color: #222; font-family: var(--sans); }
+.arch-sidebar { width: 30%; border-right: 1px solid rgba(0,0,0,0.1); display: flex; flex-direction: column; justify-content: space-between; padding: 40px; }
+.arch-logo { font-size: 24px; font-weight: 300; letter-spacing: 12px; }
+.arch-info { font-size: 10px; letter-spacing: 2px; line-height: 2; opacity: 0.6; }
+.arch-main { flex: 1; padding: 40px; display: flex; flex-direction: column; gap: 20px; }
+.arch-img { flex: 1; background: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1600&auto=format&fit=crop') center/cover; filter: sepia(0.2) grayscale(0.2); }
+.arch-title { font-family: var(--display); font-size: 32px; letter-spacing: 4px; border-bottom: 1px solid rgba(0,0,0,0.1); padding-bottom: 20px;}
+
+/* ========== SERVICES (DYNAMIC) ========== */
+#services {
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.needs-backgrounds {
+  position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0;
+}
+.need-bg {
+  position: absolute; inset: 0; background-size: cover; background-position: center;
+  opacity: 0; filter: blur(24px) grayscale(1); transform: scale(1.05);
+  transition: opacity 1.8s ease, filter 1.8s ease, transform 6s ease-out;
+}
+.need-bg.active {
+  opacity: 0.35; filter: blur(0px) grayscale(0.5); transform: scale(1);
+}
+.needs-overlay {
+  position: absolute; inset: 0; z-index: 1;
+  background: linear-gradient(to bottom, rgba(10,10,10,0.85) 0%, rgba(10,10,10,0.3) 50%, rgba(10,10,10,0.85) 100%);
+}
+
+.needs-wrapper {
+  position: relative; z-index: 10;
+  display: flex; flex-direction: column; align-items: flex-start;
+  width: 100%; max-width: 1200px; padding: 0 44px;
+}
+
+.needs-headline {
+  font-family: var(--sans); font-size: 14px; letter-spacing: 4px; text-transform: uppercase;
+  color: rgba(255,255,255,0.5); margin-bottom: 24px; font-weight: 300;
+}
+
+.needs-dynamic-box {
+  display: flex; flex-direction: column; align-items: flex-start; gap: 8px;
+}
+
+.needs-prefix {
+  font-family: var(--display); font-size: clamp(48px, 8vw, 110px);
+  font-style: italic; font-weight: 300; line-height: 1; opacity: 0.8;
+  transform: translateX(6px); /* Perfectly aligns the italic slant with the static block below */
+}
+
+.needs-words {
+  position: relative; height: clamp(56px, 9vw, 120px); width: 100%;
+}
+
+.need-word {
+  position: absolute; left: 0; top: 0;
+  font-family: var(--display); font-size: clamp(56px, 9vw, 120px);
+  font-weight: 400; line-height: 1; white-space: nowrap; color: #fff;
+  opacity: 0; transform: translateY(30px); filter: blur(12px);
+  transition: all 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.need-word.active {
+  opacity: 1; transform: translateY(0); filter: blur(0px);
+}
+
+.need-word.up {
+  opacity: 0; transform: translateY(-30px); filter: blur(12px);
+} 
+
+.needs-postline {
+  font-family: var(--sans); font-size: 14px; letter-spacing: 2px; text-transform: uppercase;
+  color: rgba(255,255,255,0.9); margin-top: 50px; font-weight: 400; font-style: italic;
 }
 
 /* ========== WORK ========== */
@@ -523,4 +839,65 @@ nav.on-light {
   .work-type, .work-year { display: none; }
   .contact-cta { font-size: clamp(36px, 10vw, 68px); }
   .scroll-indicator { right: 14px; }
+}
+
+/* ========== MOTION PRIMITIVES ========== */
+.typing-char {
+  display: inline-block;
+  opacity: 0;
+  filter: blur(8px);
+  transform: translateY(2px);
+  animation: blurIn 0.3s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+@keyframes blurIn {
+  to {
+    opacity: 1;
+    filter: blur(0px);
+    transform: translateY(0);
+  }
+}
+
+.shimmer-wave {
+  display: inline-block;
+  color: rgba(255, 255, 255, 0.1);
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.85) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: shimmerWave 2s linear infinite;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+@keyframes shimmerWave {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+/* ========== CUSTOM CURSOR ========== */
+body, a, button, .scroll-dot, .work-item { cursor: none !important; }
+
+.custom-cursor {
+  position: fixed; top: 0; left: 0;
+  width: 12px; height: 12px;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition: width 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), height 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), background 0.3s ease;
+  mix-blend-mode: difference;
+}
+
+body.hovering .custom-cursor {
+  width: 64px; height: 64px;
+  background: rgba(255, 255, 255, 1);
 }

@@ -16,10 +16,15 @@
 </head>
 <body>
 
+  <!-- ============================================================
+       FLYING MAIN LOGO (Shrinks and flies from Hero to Nav on scroll)
+  ============================================================ -->
+  <img src="SVGs/Nesthama.svg" id="flying-logo" class="flying-logo" alt="Nesthama">
+
   <!-- FIXED NAVIGATION -->
   <nav id="main-nav" class="on-dark">
     <div class="nav-left">Creative excellence,<br>crafted without compromise.</div>
-    <div class="nav-center"><div class="nav-dot" id="navDot"></div></div>
+    <div class="nav-center"></div>
     <div class="nav-right">
       <a href="#" id="nav-contact">Get in touch</a>
       <a href="#" id="nav-studio">Studio</a>
@@ -41,11 +46,6 @@
   ============================================================ -->
   <section class="site-section dark active" id="hero" data-index="0">
 
-    <!-- Big wordmark SVG replaces text -->
-    <div class="hero-wordmark-svg">
-      <img src="SVGs/Nesthama.svg" alt="Nesthama" />
-    </div>
-
     <!-- Bottom bar -->
     <div class="hero-bottom-bar">
       <span>01/</span>
@@ -55,52 +55,55 @@
   </section>
 
   <!-- ============================================================
-       SECTION 1 — INTRO  [LIGHT]
+       SECTION 1 — COPILOT  [DARK]
   ============================================================ -->
-  <section class="site-section light" id="intro" data-index="1">
-    <div class="intro-content">
-      <div class="section-label">01 / What we do</div>
-      <h2>
-        We build things<br>that make people
-        <em>stop scrolling.</em>
+  <section class="site-section dark" id="copilot" data-index="1">
+    <div class="copilot-container">
+      <h2 class="copilot-title" id="copilot-title">
+        <!-- JS will inject letter spans here -->
+        Your Digital Copilot
       </h2>
-      <p class="intro-body">
-        Nesthama is a creative studio born from the belief that beauty is not a luxury — it's a requirement. We craft digital experiences, live events, visual stories, and brand worlds that leave a mark. Not a footprint. A mark.
-      </p>
+      
+      <div class="copilot-av-wrapper" id="copilot-av">
+        <div class="av-scene">
+          <div class="av-search-bar" id="av-search">
+            <span class="av-icon">✧</span>
+            <span class="av-typing" id="av-typing"></span>
+          </div>
+          <div class="av-visuals" id="av-visuals">
+            <!-- JS will dynamically inject rich mockup scenes here -->
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
   <!-- ============================================================
-       SECTION 2 — SERVICES  [DARK]
+       SECTION 2 — SERVICES (DYNAMIC)
   ============================================================ -->
-  <section class="site-section dark" id="services" data-index="2">
-    <div class="services-header">
-      <div class="section-label">02 / Services</div>
+  <section class="site-section dark" id="services" data-index="2" style="padding: 0;">
+    <div class="needs-backgrounds">
+      <div class="need-bg active" style="background-image: url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=2600&auto=format&fit=crop')"></div>
+      <div class="need-bg" style="background-image: url('https://images.unsplash.com/photo-1540304834789-9db7bd102f6b?q=80&w=2600&auto=format&fit=crop')"></div>
+      <div class="need-bg" style="background-image: url('https://images.unsplash.com/photo-1516035069371-29a1b244cc32?q=80&w=2600&auto=format&fit=crop')"></div>
+      <div class="need-bg" style="background-image: url('https://images.unsplash.com/photo-1589882260654-e758a011cd71?q=80&w=2600&auto=format&fit=crop')"></div>
+      <div class="need-bg" style="background-image: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2600&auto=format&fit=crop')"></div>
     </div>
-
-    <div class="service-row">
-      <span class="service-name">Web Design</span>
-      <span class="service-meta">Digital</span>
-    </div>
-    <div class="service-row">
-      <span class="service-name">Events</span>
-      <span class="service-meta">Experiential</span>
-    </div>
-    <div class="service-row">
-      <span class="service-name">Concerts</span>
-      <span class="service-meta">Live Production</span>
-    </div>
-    <div class="service-row">
-      <span class="service-name">Photography</span>
-      <span class="service-meta">Visual</span>
-    </div>
-    <div class="service-row">
-      <span class="service-name">Videography</span>
-      <span class="service-meta">Film &amp; Motion</span>
-    </div>
-    <div class="service-row">
-      <span class="service-name">Brand Identity</span>
-      <span class="service-meta">Direction</span>
+    <div class="needs-overlay"></div>
+    
+    <div class="needs-wrapper">
+      <div class="needs-headline">Uncompromising execution.</div>
+      <div class="needs-dynamic-box">
+        <div class="needs-prefix">We handle the</div>
+        <div class="needs-words">
+           <span class="need-word active">Web Design.</span>
+           <span class="need-word">Event Production.</span>
+           <span class="need-word">Photography.</span>
+           <span class="need-word">Cinematography.</span>
+           <span class="need-word">Everything.</span>
+        </div>
+      </div>
+      <div class="needs-postline">Nesthama handles it all.</div>
     </div>
   </section>
 
@@ -202,6 +205,8 @@
     </div>
   </section>
 
+  <div class="custom-cursor" id="custom-cursor"></div>
+
   <!-- ============================================================
        SCRIPTS
   ============================================================ -->
@@ -214,6 +219,7 @@
     let currentIndex = 0;
     let isTransitioning = false;
     const TRANSITION_MS = 500;   // 500ms — snappy but smooth
+    let transitionTimeout;
 
     function goToSection(index) {
       if (index === currentIndex || isTransitioning) return;
@@ -235,33 +241,66 @@
       // Update nav color
       const isDark = sections[currentIndex].classList.contains('dark');
       nav.className = isDark ? 'on-dark' : 'on-light';
+      
+      // Trigger Flying Logo sequence
+      if (currentIndex > 0) {
+        document.body.classList.add('scrolled-past-hero');
+      } else {
+        document.body.classList.remove('scrolled-past-hero');
+      }
 
-      // Unlock after transition — give a tiny extra buffer
-      setTimeout(() => { isTransitioning = false; }, TRANSITION_MS + 50);
+      // Trigger Copilot Animation if entering section 1
+      if (currentIndex === 1 && window.playCopilotSequence) {
+        setTimeout(window.playCopilotSequence, 400); // Trigger after snap transition
+      }
+
+      // Standard unlock for clicks/keyboard
+      clearTimeout(transitionTimeout);
+      transitionTimeout = setTimeout(() => { isTransitioning = false; }, TRANSITION_MS + 50);
     }
 
-    // ─── Wheel ───────────────────────────────────────────────────────────────
-    // Fire immediately on first wheel event above threshold.
-    // isTransitioning gates subsequent scrolls — no debounce timeout
-    // (debounce was causing 2-3s delay with trackpad momentum/inertia).
+    // ─── Universal Scroll / Swipe Handler ────────────────────────────────────
+    let scrollLocked = false;
+    const SCROLL_COOLDOWN = 1200; // 1.2 second absolute lock to absorb all trackpad coasting
+    
+    function requestSectionChange(dir) {
+      if (scrollLocked || isTransitioning) return;
+      const newIndex = currentIndex + dir;
+      if (newIndex < 0 || newIndex >= sections.length) return;
+      
+      scrollLocked = true;
+      goToSection(newIndex);
+      
+      setTimeout(() => {
+        scrollLocked = false;
+      }, SCROLL_COOLDOWN);
+    }
+
+    // Wheel (Trackpad / Mouse)
     window.addEventListener('wheel', (e) => {
       e.preventDefault();
-      if (isTransitioning) return;
-      if (Math.abs(e.deltaY) < 5) return;  // ignore tiny jitter
-      const dir = e.deltaY > 0 ? 1 : -1;
-      goToSection(currentIndex + dir);
+      if (scrollLocked) return;
+      if (Math.abs(e.deltaY) < 25) return; // Strict threshold ignores resting finger jitters
+      
+      requestSectionChange(e.deltaY > 0 ? 1 : -1);
     }, { passive: false });
 
-    // ─── Touch ───────────────────────────────────────────────────────────────
+    // Touch (Mobile Swiping)
     let touchStartY = 0;
     window.addEventListener('touchstart', (e) => {
       touchStartY = e.touches[0].clientY;
     }, { passive: true });
 
+    // Prevent default scroll bouncing on mobile
+    window.addEventListener('touchmove', (e) => { e.preventDefault(); }, { passive: false });
+
     window.addEventListener('touchend', (e) => {
-      const diff = touchStartY - e.changedTouches[0].clientY;
-      if (Math.abs(diff) > 50) {
-        goToSection(currentIndex + (diff > 0 ? 1 : -1));
+      if (scrollLocked) return;
+      const touchEndY = e.changedTouches[0].clientY;
+      const diff = touchStartY - touchEndY;
+      
+      if (Math.abs(diff) > 40) { // Minimum swipe distance
+        requestSectionChange(diff > 0 ? 1 : -1);
       }
     }, { passive: true });
 
@@ -285,6 +324,305 @@
     document.getElementById('nav-studio').addEventListener('click', (e) => {
       e.preventDefault(); goToSection(4);
     });
+
+    // ─── Ethereal Shadow Background (Highly Optimized JS Driven) ──────────────
+    (function initEtherealShadow() {
+      // 1. Inject SVG Filter Definition + Hue Matrix
+      const svgHTML = `
+        <svg width="0" height="0" style="position: absolute; visibility: hidden;">
+          <defs>
+            <filter id="ethereal-shadow-filter">
+              <feTurbulence result="undulation" numOctaves="2" baseFrequency="0.0005,0.002" seed="0" type="turbulence" />
+              <feColorMatrix id="ethereal-hue" in="undulation" type="hueRotate" values="0" />
+              <feColorMatrix in="dist" result="circulation" type="matrix" values="4 0 0 0 1  4 0 0 0 1  4 0 0 0 1  1 0 0 0 0" />
+              <feDisplacementMap in="SourceGraphic" in2="circulation" scale="100" result="dist" />
+              <feDisplacementMap in="dist" in2="undulation" scale="100" result="output" />
+            </filter>
+          </defs>
+        </svg>
+      `;
+      document.body.insertAdjacentHTML('afterbegin', svgHTML);
+
+      // 2. Inject structurally isolated shadow instances into all zones
+      document.querySelectorAll('.site-section').forEach(section => {
+        section.insertAdjacentHTML('afterbegin', `
+          <div class="ethereal-shadow-wrapper">
+            <div class="ethereal-blob">
+              <div class="ethereal-blob-inner"></div>
+            </div>
+            <div class="ethereal-noise"></div>
+          </div>
+        `);
+      });
+
+      // 3. Re-engage the mathematical hue shift, heavily throttled to 24fps to prevent lag
+      const hueMatrix = document.getElementById('ethereal-hue');
+      if (hueMatrix) {
+        let startTime = null;
+        let lastFrameTime = 0;
+        const durationMs = 5840; 
+        
+        function animateHue(timestamp) {
+          // Throttling to ~24-26 fps prevents 120Hz/144Hz devices from choking on SVG recalculations
+          if (timestamp - lastFrameTime > 38) {
+            if (!startTime) startTime = timestamp;
+            const elapsed = timestamp - startTime;
+            const value = ((elapsed % durationMs) / durationMs) * 360;
+            hueMatrix.setAttribute('values', value.toString());
+            lastFrameTime = timestamp;
+          }
+          requestAnimationFrame(animateHue);
+        }
+        requestAnimationFrame(animateHue);
+      }
+    })();
+
+    // ─── Dynamic Needs Cycler ────────────────────────────────────────────────
+    const needWords = document.querySelectorAll('.need-word');
+    const needBgs = document.querySelectorAll('.need-bg');
+    if (needWords.length > 0) {
+      let currentNeed = 0;
+      setInterval(() => {
+        needWords[currentNeed].classList.remove('active');
+        needWords[currentNeed].classList.add('up');
+        needBgs[currentNeed].classList.remove('active');
+        
+        const oldIndex = currentNeed;
+        setTimeout(() => needWords[oldIndex].classList.remove('up'), 1200);
+        
+        currentNeed = (currentNeed + 1) % needWords.length;
+        
+        needWords[currentNeed].classList.add('active');
+        needBgs[currentNeed].classList.add('active');
+      }, 3500); 
+    }
+
+    // ─── Custom Cursor System ────────────────────────────────────────────────
+    const cursorObj = document.getElementById('custom-cursor');
+    if (cursorObj) {
+      document.addEventListener('mousemove', e => {
+        cursorObj.style.left = e.clientX + 'px';
+        cursorObj.style.top = e.clientY + 'px';
+      });
+
+      document.querySelectorAll('a, button, .scroll-dot, .work-item').forEach(el => {
+        el.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
+        el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
+      });
+    }
+
+    // ─── Splash Initial Reveal ───────────────────────────────────────────────
+    window.addEventListener('load', () => {
+      // Trigger hero stagger instantly on load (Splash screen HTML removed)
+      document.body.classList.add('loaded');
+    });
+
+    // ─── Digital Copilot Sequence ────────────────────────────────────────────
+    const copilotTitle = document.getElementById('copilot-title');
+    const avWrapper = document.getElementById('copilot-av');
+    const textToBlur = "Your Digital Copilot".split('');
+    
+    // Inject blur spans
+    copilotTitle.innerHTML = textToBlur.map(char => `<span class="blur-char" style="opacity:0; filter:blur(10px); display:inline-block;">${char === ' ' ? '&nbsp;' : char}</span>`).join('');
+    
+    let copilotHasPlayed = false;
+
+    window.playCopilotSequence = function() {
+      if (copilotHasPlayed) return;
+      copilotHasPlayed = true;
+
+      const chars = copilotTitle.querySelectorAll('.blur-char');
+      
+      // 1. Blur reveal letter by letter
+      chars.forEach((char, i) => {
+        setTimeout(() => {
+          char.style.transition = 'opacity 0.8s ease, filter 0.8s ease';
+          char.style.opacity = '1';
+          char.style.filter = 'blur(0px)';
+        }, i * 60); 
+      });
+
+      const textRevealDuration = chars.length * 60 + 800;
+
+      // 2. Move text UP & expose AV screen
+      setTimeout(() => {
+        copilotTitle.classList.add('shift-up');
+        avWrapper.classList.add('reveal');
+        
+        // 3. Play AV Mockup timeline
+        setTimeout(playAVMockup, 1000);
+      }, textRevealDuration + 400); 
+    };
+
+    const avTyping = document.getElementById('av-typing');
+    const avVisuals = document.getElementById('av-visuals');
+
+    function typeText(text, cb) {
+      avTyping.innerHTML = '';
+      let i = 0;
+      function type() {
+        if (i < text.length) {
+          const char = text.charAt(i);
+          const span = document.createElement('span');
+          span.className = 'typing-char';
+          span.innerHTML = char === ' ' ? '&nbsp;' : char;
+          avTyping.appendChild(span);
+          i++;
+          setTimeout(type, 15 + Math.random() * 25); // slightly faster for the blur effect
+        } else {
+          setTimeout(cb, 500);
+        }
+      }
+      type();
+    }
+
+    const mockupScenes = [
+      {
+        text: "Design a high-end website for my luxury restaurant.",
+        html: `
+          <div class="mockup-scene restaurant-scene">
+            <div class="scene-nav">
+              <div class="scene-logo">AERIA</div>
+              <div class="scene-links"><span>Menu</span><span>Private Dining</span></div>
+            </div>
+            <div class="scene-hero">
+              <div class="scene-subtitle">Michelin Starred Experience</div>
+              <div class="scene-title">Taste the Canvas</div>
+              <div class="scene-btn-glass">Make a Reservation</div>
+            </div>
+          </div>
+        `
+      },
+      {
+        text: "Generate a disruptive brand identity for a music festival.",
+        html: `
+          <div class="mockup-scene festival-scene">
+            <div class="fest-grid">
+              <div class="fest-col fest-dark">
+                <div class="fest-year">2026</div>
+                <div class="fest-huge">NEON<br>VOID</div>
+                <div class="fest-date">Aug 14-16 // Tokyo</div>
+              </div>
+              <div class="fest-col fest-img"></div>
+            </div>
+          </div>
+        `
+      },
+      {
+        text: "Build a sleek e-commerce store for streetwear.",
+        html: `
+          <div class="mockup-scene fashion-scene">
+            <div class="fash-nav">
+              <div class="fash-logo">V Ø I D</div>
+              <div class="fash-cart">CART (2)</div>
+            </div>
+            <div class="fash-layout">
+              <div class="fash-main-img"></div>
+              <div class="fash-sidebar">
+                <div class="fash-title">Utility Cargo V2</div>
+                <div class="fash-price">$240.00</div>
+                <div class="fash-desc">Constructed from Japanese nylon with water-repellent finish. Articulated knee panels and magnetic closures.</div>
+                <div class="fash-add">ADD TO CART</div>
+              </div>
+            </div>
+          </div>
+        `
+      },
+      {
+        text: "Create a minimalist portfolio for my photography agency.",
+        html: `
+          <div class="mockup-scene photo-scene">
+            <div class="photo-hero">
+              <div class="photo-title">LIGHT &<br>SHADOW</div>
+              <div class="photo-sub">Selected Works 24/25</div>
+            </div>
+            <div class="photo-gallery">
+              <div class="photo-img i1"></div>
+              <div class="photo-img i2"></div>
+              <div class="photo-img i3"></div>
+            </div>
+          </div>
+        `
+      },
+      {
+        text: "Design a futuristic landing page for an AI robotics company.",
+        html: `
+          <div class="mockup-scene tech-scene">
+            <div class="tech-nav">
+              <div class="tech-logo">AURA::ROBOTICS</div>
+              <div class="tech-links"><span>VISION</span><span>MODELS</span></div>
+            </div>
+            <div class="tech-hero">
+              <div class="tech-badge">G-SERIES ANNOUNCED</div>
+              <div class="tech-title">Beyond<br>Human.</div>
+            </div>
+          </div>
+        `
+      },
+      {
+        text: "Create a sophisticated web presence for an architecture firm.",
+        html: `
+          <div class="mockup-scene arch-scene">
+            <div class="arch-sidebar">
+              <div class="arch-logo">K N O T</div>
+              <div class="arch-info">
+                <div>TOKYO, JAPAN</div>
+                <div>EST 1992</div>
+              </div>
+            </div>
+            <div class="arch-main">
+              <div class="arch-img"></div>
+              <div class="arch-title">SPATIAL HARMONY</div>
+            </div>
+          </div>
+        `
+      }
+    ];
+
+    let currentScene = 0;
+    let lastRenderedScene = null;
+
+    function playLoopingAV() {
+      const scene = mockupScenes[currentScene];
+      const avVisuals = document.getElementById('av-visuals');
+      
+      // We start typing the next prompt immediately! The old website STAYS beautifully visible underneath.
+      typeText(scene.text, () => {
+         // Typing is complete, fire off the mesmerizing deep blur crossfade reveal!
+
+         // Blur-out old scene
+         if (lastRenderedScene) {
+           const oldScene = lastRenderedScene;
+           oldScene.classList.remove('visible');
+           oldScene.classList.add('exiting');
+           setTimeout(() => { if (oldScene.parentNode) oldScene.remove(); }, 1800); // Purge DOM after transition ends
+         }
+
+         // Inject newly generated scene
+         const tempDiv = document.createElement('div');
+         tempDiv.innerHTML = scene.html;
+         const newScene = tempDiv.firstElementChild;
+         avVisuals.appendChild(newScene);
+
+         // Lock its blurry base CSS state before forcing the clear visible transition
+         requestAnimationFrame(() => {
+           requestAnimationFrame(() => {
+             newScene.classList.add('visible');
+             lastRenderedScene = newScene;
+             
+             // Keep this website beautifully lit on screen for 4.5 seconds... 
+             // and then natively loop text to generate the next one!
+             setTimeout(() => {
+                currentScene = (currentScene + 1) % mockupScenes.length;
+                playLoopingAV();
+             }, 4500); 
+           });
+         });
+      });
+    }
+
+    // Replace the old playAVMockup with the infinite loop
+    window.playAVMockup = playLoopingAV;
   </script>
 
 </body>
