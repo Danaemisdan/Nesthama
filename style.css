@@ -491,6 +491,41 @@ body.light-bg-active.loaded #flying-logo {
   z-index: 1;
 }
 
+/* Metric Badges — float out from sides of mockup */
+.metric-badge {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 50;
+  background: rgba(15, 15, 15, 0.55);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(255,255,255,0.12);
+  padding: 11px 18px;
+  border-radius: 100px;
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.9);
+  white-space: nowrap;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  animation: floatPill 5s ease-in-out infinite alternate;
+}
+.metric-badge.left {
+  left: -140px;
+  animation-delay: 0s;
+}
+.metric-badge.right {
+  right: -140px;
+  animation-delay: -2.5s;
+}
+@keyframes floatPill {
+  0%   { transform: translateY(calc(-50% + 0px)); }
+  100% { transform: translateY(calc(-50% - 10px)); }
+}
+
 /* 1. Restaurant */
 .restaurant-scene {
   background: url('https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?q=80&w=2600&auto=format&fit=crop') center/cover;
@@ -568,25 +603,6 @@ body.light-bg-active.loaded #flying-logo {
 .arch-img { flex: 1; background: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1600&auto=format&fit=crop') center/cover; filter: sepia(0.2) grayscale(0.2); }
 .arch-title { font-family: var(--display); font-size: 32px; letter-spacing: 4px; border-bottom: 1px solid rgba(0,0,0,0.1); padding-bottom: 20px;}
 
-/* 7. SEO Dashboard */
-.seo-scene { background: #fdfdfd; color: #111; font-family: var(--sans); }
-.seo-sidebar { width: 140px; background: #f4f4f4; padding: 20px; display: flex; flex-direction: column; justify-content: flex-start; gap: 30px; font-size: 10px; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; }
-.seo-logo { font-family: var(--display); font-size: 20px; letter-spacing: 2px; }
-.seo-menu { display: flex; flex-direction: column; gap: 16px; opacity: 0.5; }
-.seo-menu .active { opacity: 1; font-weight: 700; color: #0044ff; }
-.seo-main { flex: 1; padding: 30px; display: flex; flex-direction: column; gap: 20px; }
-.seo-header { font-size: 12px; opacity: 0.4; letter-spacing: 2px; border-bottom: 1px solid rgba(0,0,0,0.1); padding-bottom: 12px; }
-.seo-chart-area { flex: 1; background: #fff; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); padding: 24px; display: flex; flex-direction: column; }
-.seo-stat { font-size: 32px; font-weight: 300; letter-spacing: -1px; color: #0044ff; margin-bottom: 20px; }
-.seo-graph { flex: 1; background: linear-gradient(180deg, rgba(0,68,255,0.1) 0%, rgba(255,255,255,0) 100%); border-radius: 4px; border-top: 2px dashed #0044ff; }
-
-/* 8. AI Sales Component */
-.ai-scene { background: #000; color: #fff; font-family: var(--sans); overflow: hidden; display: flex; align-items: center; justify-content: center; }
-.ai-bg { position: absolute; inset: -50px; background: url('https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=2000&auto=format&fit=crop') center/cover; filter: contrast(1.5) saturate(0) opacity(0.3); animation: slowDrift 20s infinite alternate; }
-.ai-glass { position: relative; z-index: 10; padding: 40px; background: rgba(255,255,255,0.03); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; text-align: center; }
-.ai-title { font-family: var(--display); font-size: 64px; line-height: 0.9; margin-bottom: 24px; }
-.ai-pill { display: inline-block; padding: 8px 16px; background: rgba(0,255,100,0.1); color: #00ff66; border-radius: 100px; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; }
-
 /* ========== SERVICES (DYNAMIC) ========== */
 #services {
   justify-content: center;
@@ -649,11 +665,6 @@ body.light-bg-active.loaded #flying-logo {
 .need-word.up {
   opacity: 0; transform: translateY(-30px); filter: blur(12px);
 } 
-
-.needs-postline {
-  font-family: var(--sans); font-size: 14px; letter-spacing: 2px; text-transform: uppercase;
-  color: rgba(255,255,255,0.9); margin-top: 50px; font-weight: 400; font-style: italic;
-}
 
 /* ========== WORK ========== */
 #work {
